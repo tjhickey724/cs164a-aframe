@@ -13,7 +13,6 @@
   </head>
   <body>
     <a-scene
-        shadow="type: pcfsoft"
         physics="friction:0.0; restitution:0.2; debug:true"
         renderer="antialias:true">
 
@@ -36,15 +35,13 @@
                   material="shader:flat;src:#skybox-tex"></a-mixin>
 
                 <a-mixin id="suzy"
-                  dynamic-body="angularDamping:0.99"
+                  dynamic-body="angularDamping:0.99; shape:cylinder"
                   obj-model="obj:#suzy-obj; mtl:#suzy-mtl"
                   follow="target:#avbox; speed:1"
-                  shadow="cast:true"
                   ></a-mixin>
 
                 <a-mixin id="donut"
                     dynamic-body
-                    shadow="cast:true"
                     material="color:#AA5500"
                     arc="360" radius="0.4" radius-tubular="0.1"
                     scale="0.2 0.2 0.2"
@@ -56,6 +53,12 @@
                     dynamic-body
                     material="color:goldenrod">
                 </a-mixin>
+
+                <a-mixin id="wall"
+                    geometry="primitive:box; height:1; width:80; depth:1"
+                    static-body
+                    material="src:#floor_img; repeat:4 4; side:double; shader:standard"
+                ></a-mixin>
 
         </a-assets>
 
@@ -81,11 +84,7 @@
         // LIGHTING
           <!-- we add a point light and some ambient light -->
         <a-entity
-                light="type:directional; castShadow:true;
-                      shadowCameraBottom:-5; shadowCameraTop:15;
-                      shadowCameraLeft:-22; shadowCameraRight:8;
-                      shadowMapHeight: 1024;  shadowMapWidth: 1024;
-                      shadowCameraVisible: false;
+                light="type:directional;
                       color: #FFF; intensity: 1.0"
                 position="-10 24 10">
         </a-entity>
@@ -95,22 +94,22 @@
         </a-entity>
 
 
-        // GAME FLOOR
+        // GAME FLOOR with walls (powerup.js keeps avatar within the walls)
         <a-entity
-            geometry="primitive:plane; height:40; width:40"
+            geometry="primitive:plane; height:80; width:80"
             static-body
-            shadow="receive:true"
             material="src:#floor_img; repeat:4 4; side:double; shader:standard"
             position="0 0 0" rotation="-90 0 0">
         </a-entity>
 
-
-
+        <a-entity mixin="wall" position="0 0 -40" rotation="0 0 0" ></a-entity>
+        <a-entity mixin="wall" position="0 0 40" rotation="0 0 0"  ></a-entity>
+        <a-entity mixin="wall" position="-40 0 0" rotation="0 90 0"  ></a-entity>
+        <a-entity mixin="wall" position="40 0 0" rotation="0 90 0"  ></a-entity>
 
         // AVATAR with Camera and movement controls
-        <a-box   id="avbox"
-              scale="1 1 1"
-              movement-controls
+        <a-box  id="avbox"
+              movement-controls="fly:true"
               position="0 1 1">
 
             <a-entity camera>
@@ -125,8 +124,7 @@
             <a-box id="avatar"
                 powerup
                 static-body
-                sound="src: url(sounds/gamemusic.mp3); loop:true; volume:0.5; autoplay: true"
-                shadow="cast:true"
+                sounds="src: url(sounds/gamemusic.mp3); loop:true; volume:0.5; autoplay: true"
                 scale="2 2 2" position="0 0 0" material="color:red">
             </a-box>
         </a-box>

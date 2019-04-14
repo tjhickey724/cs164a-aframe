@@ -9,8 +9,9 @@ AFRAME.registerComponent('powerup', {
 
   init: function() {
     const component = this
-    this.health=10
+    this.health=5
     this.score=0
+    this.avatar = document.querySelector("#avbox")
     this.collisionHandler = (e) => {
          console.log('just collided with something')
          component.otherBody = e.detail.body
@@ -21,6 +22,16 @@ AFRAME.registerComponent('powerup', {
   tick: function(uptime,delta) {
     const otherBody = this.otherBody
     this.otherBody = null
+    if (this.avatar) {
+
+    let pos = this.avatar.object3D.position
+    let wall=40
+    if (pos.x >  wall) pos.x=  wall
+    if (pos.x < -wall) pos.x= -wall
+    if (pos.z >  wall) pos.z=  wall
+    if (pos.z < -wall) pos.z= -wall
+    //pos.set(position)
+  }
 
     if (otherBody) {
 
@@ -34,14 +45,20 @@ AFRAME.registerComponent('powerup', {
 
       if (eltHealth) {
         this.health+= eltHealth;
-        hud.setAttribute('health',this.health)
       }
 
       if (eltScore) {
         this.score += eltScore;
-        hud.setAttribute('score',this.score)
       }
-      console.dir([eltHealth,eltScore,elt,this,hud])
+
+
+      hud.setAttribute('health',this.health)
+      hud.setAttribute('score',this.score)
+      hud.setAttribute('text','value',
+               "Score:"
+             + this.score
+             + "  Health:"
+             + this.health)
 
       if (eltHealth || eltScore){
         console.log('removing elt from scene')
@@ -50,12 +67,13 @@ AFRAME.registerComponent('powerup', {
         console.dir(elt.parentNode)
         otherBody.el.removeAttribute("dynamic-body");
         elt.parentNode.removeChild(elt)
-        hud.setAttribute('text','value',
-                 "Score:"
-               + this.score
-               + "  Health:"
-               + this.health)
+      }
 
+      if (this.health <0){
+        hud.setAttribute('text','value',"YOU LOSE!! GAME OVER!")
+      }
+      if (this.score>20){
+        hud.setAttribute('text','value',"YOU WIN!!")
       }
 
     }
