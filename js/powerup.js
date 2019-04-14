@@ -23,7 +23,9 @@ AFRAME.registerComponent('powerup', {
     this.otherBody = null
 
     if (otherBody) {
+
       console.log('in the tick function')
+      console.dir(otherBody)
       const hud = this.data.target
 
       let elt = otherBody.el

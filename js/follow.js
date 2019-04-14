@@ -1,3 +1,6 @@
+// this comes from the aframe.io website but I modified it slightly
+// to use impulses rather than position changes...
+
 AFRAME.registerComponent('follow', {
   schema: {
     target: {type: 'selector'},
@@ -15,14 +18,12 @@ AFRAME.registerComponent('follow', {
     var targetPosition = this.data.target.object3D.position;
     var currentPosition = this.el.object3D.position;
 
+
     // Subtract the vectors to get the direction the entity should head in.
     directionVec3.copy(targetPosition).sub(currentPosition);
 
     // Calculate the distance.
     var distance = directionVec3.length();
-
-    // Don't go any closer if a close proximity has been reached.
-    if (distance < 1) { return; }
 
     // Scale the direction vector's magnitude down to match the speed.
     var factor = this.data.speed / distance;
@@ -30,20 +31,12 @@ AFRAME.registerComponent('follow', {
       directionVec3[axis] *= factor * (timeDelta / 1000);
     });
 
-    // Translate the entity in the direction towards the target.
-    //this.el.removeAttribute("dynamic-body");
-    /*
-    this.el.setAttribute('position', {
-      x: currentPosition.x + directionVec3.x,
-      y: currentPosition.y + directionVec3.y,
-      z: currentPosition.z + directionVec3.z
-    });
-    */
-    this.el.setAttribute('velocity', {
-      x: directionVec3.x,
-      y: directionVec3.y+0.1,
-      z: directionVec3.z
-    });
-    //this.el.setAttribute("dynamic-body");
+    // here we applhy a push toward the target
+    if (this.el.body) {
+    this.el.body.applyImpulse(
+     new CANNON.Vec3().copy(directionVec3),
+     new CANNON.Vec3().copy(this.el.body.position)//getComputedAttribute('position'))
+    )
+   }
   }
 });

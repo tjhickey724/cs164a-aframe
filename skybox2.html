@@ -36,7 +36,7 @@
                   material="shader:flat;src:#skybox-tex"></a-mixin>
 
                 <a-mixin id="suzy"
-                  dynamic-body
+                  dynamic-body="angularDamping:0.99"
                   obj-model="obj:#suzy-obj; mtl:#suzy-mtl"
                   follow="target:#avbox; speed:1"
                   shadow="cast:true"
@@ -125,6 +125,7 @@
             <a-box id="avatar"
                 powerup
                 static-body
+                sound="src: url(sounds/gamemusic.mp3); loop:true; volume:0.5; autoplay: true"
                 shadow="cast:true"
                 scale="2 2 2" position="0 0 0" material="color:red">
             </a-box>
