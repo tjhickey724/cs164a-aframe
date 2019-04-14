@@ -1,8 +1,8 @@
 <html>
   <head>
      <OLDscript src="https://aframe.io/releases/0.9.0/aframe.min.js"></OLDscript>
-    <script src="/aframe.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="js/aframe.js"></script>
+    <script src="js/aframe-extras.js"></script>
   </head>
   <body>
     <a-scene shadow="type: pcfsoft" renderer="antialias:true">
@@ -12,22 +12,24 @@
 
       <a-assets>
         <!-- load in the textures -->
-        <img id="floor_img" src="/cherry_light.jpg">
-        <img id="skybox-tex" src="skybox.jpg">
-        <a-asset-item id="skybox-obj" src="skybox.obj"></a-asset-item>
-        <a-asset-item id="skybox-mtl" src="skybox.mtl"></a-asset-item>
+        <img id="floor_img" src="images/cherry_light.jpg">
+        <img id="skybox-tex" src="images/skybox.jpg">
+        <!-- load in the objects with their materials -->
+        <a-asset-item id="skybox-obj" src="models/skybox.obj"></a-asset-item>
+        <a-asset-item id="skybox-mtl" src="models/skybox.mtl"></a-asset-item>
+        <a-asset-item id="suzy-obj" src="models/suzy.obj"></a-asset-item>
+        <a-asset-item id="suzy-mtl" src="models/suzy.mtl"></a-asset-item>
 
+        <!-- create a few mixins -->
         <a-mixin id="skybox1"
           obj-model="obj:#skybox-obj; mtl:#skybox-mtl"></a-mixin>
         <a-mixin id="skybox2"
           obj-model="obj:#skybox-obj"
           material="shader:flat;src:#skybox-tex"></a-mixin>
+        <a-mixin id="suzy"
+          obj-model="obj:#suzy-obj; mtl:#suzy-mtl"></a-mixin>
 
 
-          <a-asset-item id="suzy-obj" src="suzy.obj"></a-asset-item>
-          <a-asset-item id="suzy-mtl" src="suzy.mtl"></a-asset-item>
-          <a-mixin id="suzy"
-            obj-model="obj:#suzy-obj; mtl:#suzy-mtl"></a-mixin>
       </a-assets>
 
 
@@ -40,7 +42,11 @@
     <a-torus
         shadow="cast:true"
         material="color:#FFFFFF; side:double; transparent:true; opacity:0.8"
-        arc="360" radius="1" radius-tubular="0.1" position="-2 2 -3"> </a-torus>
+        arc="360"
+        radius="1"
+        radius-tubular="0.1"
+        position="-2 2 -3"> 
+    </a-torus>
 
 
 

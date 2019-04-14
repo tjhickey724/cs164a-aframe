@@ -9,7 +9,10 @@ AFRAME.registerComponent('powerup', {
 
   init: function() {
     const component = this
+    this.health=10
+    this.score=0
     this.collisionHandler = (e) => {
+         console.log('just collided with something')
          component.otherBody = e.detail.body
     }
     this.el.addEventListener('collide', this.collisionHandler);
@@ -20,29 +23,37 @@ AFRAME.registerComponent('powerup', {
     this.otherBody = null
 
     if (otherBody) {
+      console.log('in the tick function')
       const hud = this.data.target
-      let health = parseInt(hud.getAttribute('health'))
-      let score = parseInt(hud.getAttribute('score'))
-
 
       let elt = otherBody.el
       const eltHealth = parseInt(elt.getAttribute('health'))
       const eltScore = parseInt(elt.getAttribute('score'))
 
       if (eltHealth) {
-        health+= eltHealth;
-        hud.setAttribute('health',health)
+        this.health+= eltHealth;
+        hud.setAttribute('health',this.health)
       }
 
       if (eltScore) {
-        score += eltScore;
-        hud.setAttribute('score',score)
+        this.score += eltScore;
+        hud.setAttribute('score',this.score)
       }
+      console.dir([eltHealth,eltScore,elt,this,hud])
 
       if (eltHealth || eltScore){
+        console.log('removing elt from scene')
+        console.dir(elt)
+        console.log('parent is ')
+        console.dir(elt.parentNode)
         otherBody.el.removeAttribute("dynamic-body");
         elt.parentNode.removeChild(elt)
-        hud.setAttribute('text','value',"Score:"+score+"  Health:"+health)
+        hud.setAttribute('text','value',
+                 "Score:"
+               + this.score
+               + "  Health:"
+               + this.health)
+
       }
 
     }

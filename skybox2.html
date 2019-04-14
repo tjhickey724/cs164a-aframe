@@ -14,113 +14,122 @@
   <body>
     <a-scene
         shadow="type: pcfsoft"
-        physics="friction:0.2; restitution:0.7; debug:true"
+        physics="friction:0.0; restitution:0.2; debug:true"
         renderer="antialias:true">
 
 
-      <a-assets>
-        <!-- load in the textures -->
-        <img id="floor_img" src="images/cherry_light.jpg">
-        <img id="skybox-tex" src="images/skybox.jpg">
-        <a-asset-item id="skybox-obj" src="models/skybox.obj"></a-asset-item>
-        <a-asset-item id="skybox-mtl" src="models/skybox.mtl"></a-asset-item>
+        <a-assets>
+                <!-- load in the textures -->
+                <img id="floor_img" src="images/cherry_light.jpg">
+                <img id="skybox-tex" src="images/skybox.jpg">
+                <!-- load in the models -->
+                <a-asset-item id="skybox-obj" src="models/skybox.obj"></a-asset-item>
+                <a-asset-item id="skybox-mtl" src="models/skybox.mtl"></a-asset-item>
+                <a-asset-item id="suzy-obj" src="models/suzy.obj"></a-asset-item>
+                <a-asset-item id="suzy-mtl" src="models/suzy.mtl"></a-asset-item>
 
-        <a-mixin id="skybox1"
-          obj-model="obj:#skybox-obj; mtl:#skybox-mtl"></a-mixin>
-        <a-mixin id="skybox2"
-          obj-model="obj:#skybox-obj"
-          material="shader:flat;src:#skybox-tex"></a-mixin>
+                <!-- create some mixins -->
+                <a-mixin id="skybox1"
+                  obj-model="obj:#skybox-obj; mtl:#skybox-mtl"></a-mixin>
+                <a-mixin id="skybox2"
+                  obj-model="obj:#skybox-obj"
+                  material="shader:flat;src:#skybox-tex"></a-mixin>
 
+                <a-mixin id="suzy"
+                  dynamic-body
+                  obj-model="obj:#suzy-obj; mtl:#suzy-mtl"
+                  follow="target:#avbox; speed:1"
+                  shadow="cast:true"
+                  ></a-mixin>
 
-          <a-asset-item id="suzy-obj" src="models/suzy.obj"></a-asset-item>
-          <a-asset-item id="suzy-mtl" src="models/suzy.mtl"></a-asset-item>
-          <a-mixin id="suzy"
-            obj-model="obj:#suzy-obj; mtl:#suzy-mtl"></a-mixin>
-      </a-assets>
+                <a-mixin id="donut"
+                    dynamic-body
+                    shadow="cast:true"
+                    material="color:#AA5500"
+                    arc="360" radius="0.4" radius-tubular="0.1"
+                    scale="0.2 0.2 0.2"
+                ></a-mixin>
 
+                <a-mixin id="coin"
+                    rotation="90 0 0"
+                    scale="0.4 0.1 0.4"
+                    dynamic-body
+                    material="color:goldenrod">
+                </a-mixin>
 
-    <a-obj-model mixin="skybox2"></a-obj-model>
+        </a-assets>
 
-    <a-obj-model
-            log
-            score="1"
-            dynamic-body
-            mixin="suzy"
-            follow="target:#avbox; speed:0"
-            shadow="cast:true" position="5 2 -10" scale="2 2 2"></a-obj-model>
+        // SKYBOX
+        <a-obj-model mixin="skybox2"></a-obj-model>
 
+        // COINS
+        <a-cylinder mixin="coin" score="10" position="0 1 -15"></a-cylinder>
+        <a-cylinder mixin="coin" score="10" position="10 1 -15"></a-cylinder>
+        <a-cylinder mixin="coin" score="10" position="-10 1 -15"></a-cylinder>
 
-    <!-- here is a torus but we can't make it transparent -->
-    <a-torus
-        shadow="cast:true"
-        dynamic-body
-        health="-15"
-        material="color:#FFFFFF; side:double; transparent:true; opacity:0.8"
-        arc="360" radius="1" radius-tubular="0.1" position="-2 2 -5"> </a-torus>
+        // NPCs that decrease your health
+        <a-obj-model mixin="suzy"  health="-5" position="5 1 -10" \></a-obj-model>
+        <a-obj-model mixin="suzy"  health="-5" position="-5 1 -10" \></a-obj-model>
+        <a-obj-model mixin="suzy"  health="-5" position="0 1 -20" \></a-obj-model>
 
-
-    <a-entity cursor position="0 0 -5"></a-entity>
-
-
-      <!-- we add a point light and some ambient light -->
-      <a-entity
-              light="type:directional; castShadow:true;
-                    shadowCameraBottom:-5; shadowCameraTop:15;
-                    shadowCameraLeft:-22; shadowCameraRight:8;
-                    shadowMapHeight: 1024;  shadowMapWidth: 1024;
-                    shadowCameraVisible: false;
-                    color: #FFF; intensity: 1.0"
-              position="-10 24 10"></a-entity>
-
-
-
-
-      <a-entity
-          light="type:ambient; color: #FFF; intensity: 0.1" ></a-entity>
-
-
-      <!-- here is the floor , but we can't make it reflective -->
-      <a-entity
-          geometry="primitive:plane; height:40; width:40"
-          static-body
-          shadow="receive:true"
-          material="src:#floor_img; repeat:4 4; side:double; shader:standard"
-          position="0 0 0" rotation="-90 0 0"></a-entity>
+        // donuts to increase your health
+        <a-torus mixin="donut" health="5" position="3 10 -5"></a-torus>
+        <a-torus mixin="donut" health="5" position="-3 10 -5"></a-torus>
+        <a-torus mixin="donut" health="5" position="0 10 -5"></a-torus>
 
 
-   <a-box
-       dynamic-body
-       score="10"
-       scale="2 2 1" position="0 1 -15" material="color:green">
-   </a-box>
+        // LIGHTING
+          <!-- we add a point light and some ambient light -->
+        <a-entity
+                light="type:directional; castShadow:true;
+                      shadowCameraBottom:-5; shadowCameraTop:15;
+                      shadowCameraLeft:-22; shadowCameraRight:8;
+                      shadowMapHeight: 1024;  shadowMapWidth: 1024;
+                      shadowCameraVisible: false;
+                      color: #FFF; intensity: 1.0"
+                position="-10 24 10">
+        </a-entity>
 
-      <!-- finally we add a camera and avatar -->
+        <a-entity
+            light="type:ambient; color: #FFF; intensity: 0.1" >
+        </a-entity>
 
-      <a-box   id="avbox"
-            scale="1 1 1"
-            movement-controls
-            position="0 1 1">
 
-          <a-entity camera>
-              <a-entity id="hud"
-                health="10"
-                score="0"
-                text="width:3; value: Start Game!;"
-                position="0 0 -2"
-              ></a-entity>
-          </a-entity>
+        // GAME FLOOR
+        <a-entity
+            geometry="primitive:plane; height:40; width:40"
+            static-body
+            shadow="receive:true"
+            material="src:#floor_img; repeat:4 4; side:double; shader:standard"
+            position="0 0 0" rotation="-90 0 0">
+        </a-entity>
 
-          <a-box id="avatar"
-              powerup
-              static-body
-              shadow="cast:true"
-              scale="2 2 2" position="0 0 0" material="color:red">
-          </a-box>
-      </a-box>
 
-<!--
-      <a-sky src="#bgd_img"></a-sky>
--->
+
+
+        // AVATAR with Camera and movement controls
+        <a-box   id="avbox"
+              scale="1 1 1"
+              movement-controls
+              position="0 1 1">
+
+            <a-entity camera>
+                <a-entity id="hud"
+                  health="10"
+                  score="0"
+                  text="width:3; value: Start Game!;"
+                  position="0 0 -2"
+                ></a-entity>
+            </a-entity>
+
+            <a-box id="avatar"
+                powerup
+                static-body
+                shadow="cast:true"
+                scale="2 2 2" position="0 0 0" material="color:red">
+            </a-box>
+        </a-box>
+
 
     </a-scene>
   </body>

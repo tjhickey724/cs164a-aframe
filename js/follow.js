@@ -31,10 +31,19 @@ AFRAME.registerComponent('follow', {
     });
 
     // Translate the entity in the direction towards the target.
+    //this.el.removeAttribute("dynamic-body");
+    /*
     this.el.setAttribute('position', {
       x: currentPosition.x + directionVec3.x,
       y: currentPosition.y + directionVec3.y,
       z: currentPosition.z + directionVec3.z
     });
+    */
+    this.el.setAttribute('velocity', {
+      x: directionVec3.x,
+      y: directionVec3.y+0.1,
+      z: directionVec3.z
+    });
+    //this.el.setAttribute("dynamic-body");
   }
 });
