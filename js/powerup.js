@@ -1,9 +1,7 @@
 console.log("loading powerup.js")
 AFRAME.registerComponent('powerup', {
   schema: {
-    target: {type: 'selector', default:"#hud"},
-    value: {type: 'number', default:0},
-    title: {type: 'string', default:"score"}
+    target: {type: 'selector', default:"#hud"}
   },
 
 
