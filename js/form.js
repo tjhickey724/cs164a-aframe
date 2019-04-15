@@ -7,15 +7,19 @@ AFRAME.registerComponent('hello-world', {
 AFRAME.registerComponent('log', {
   schema: {
     message: {type: 'string', default: 'Hello, World!'},
-    test:{type:'int',default:0},
+    test:{type:'int',default:0}
   },
+
   init: function(){
     console.log(this.data.message)
     console.log(this.data.test*10)
   },
 
-  tick: function(time,timedelta){
-  }
+  tick: function(time, timeDelta){
+    //.....
+  },
+
+
   // ...
 });
 

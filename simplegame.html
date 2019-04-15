@@ -5,9 +5,32 @@
 
     <script src="js/aframe-extras.js"></script>
     <script src="js/aframe-physics-system.js"></script>
+
+    <script src="js/aframe-template-component.min.js"></script>
+
     <script src="js/test.js"></script>
     <script src="js/follow.js"></script>
     <script src="js/powerup.js"></script>
+
+    <script id="coinsTemplate" type="text/x-nunjucks-template">
+      {% for x in range(0, 10) %}
+        {% for z in range(0, 10) %}
+          <a-cylinder mixin="coin" score="10" rotation={{r}}
+                    position="{{ x * 10 - 50 }} 10 {{ z * 10 - 50}}">
+          </a-cylinder>
+        {% endfor %}
+      {% endfor %}
+    </script>
+
+    <script id="timeTemplate" type="text/x-nunjucks-template">
+      {% for x in range(0, 10) %}
+        {% for z in range(0, 10) %}
+          <a-box mixin="timer" time="10" scale="0.5 0.5 0.5" rotation={{r}}
+                    position="{{ x * 10 - 47 }} 10 {{ z * 10 - 47}}">
+          </a-box>
+        {% endfor %}
+      {% endfor %}
+    </script>
 
 
   </head>
@@ -60,15 +83,24 @@
                     material="src:#floor_img; repeat:4 4; side:double; shader:standard"
                 ></a-mixin>
 
+                <a-mixin id="timer"
+                      scale="4 4 4" material="color:red"
+                        dynamic-body
+                    ></a-mixin>
+
+
+
         </a-assets>
 
         // SKYBOX
         <a-obj-model mixin="skybox2"></a-obj-model>
 
+
+        // TIMING POWERUPS
+        <a-entity template="src: #timeTemplate" data-r="0 60 0" ></a-entity>
+
         // COINS
-        <a-cylinder mixin="coin" score="10" position="0 1 -15"></a-cylinder>
-        <a-cylinder mixin="coin" score="10" position="10 1 -15"></a-cylinder>
-        <a-cylinder mixin="coin" score="10" position="-10 1 -15"></a-cylinder>
+        <a-entity template="src: #coinsTemplate" data-r="0 45 0" ></a-entity>
 
         // NPCs that decrease your health
         <a-obj-model mixin="suzy"  health="-5" position="5 1 -10" \></a-obj-model>
@@ -117,7 +149,7 @@
                   health="10"
                   score="0"
                   text="width:3; value: Start Game!;"
-                  position="0 0 -2"
+                  position="0 1 -2"
                 ></a-entity>
             </a-entity>
 
